@@ -3,6 +3,7 @@ package com.school.driver.domain.service;
 import com.school.driver.domain.model.Route;
 import com.school.driver.domain.vo.request.RouteListFilterRequestVO;
 import com.school.driver.domain.vo.response.RoutePaginatedVO;
+import com.school.driver.domain.vo.response.ValidationResponseVO;
 
 public interface RouteDomainService {
 
@@ -19,4 +20,6 @@ public interface RouteDomainService {
     Route findRoute(Long id);
 
     RoutePaginatedVO findRoutesByFilter(RouteListFilterRequestVO listFilterRequestVO);
+
+    void treatValidation(ValidationResponseVO validationResponseVO);
 }

@@ -47,7 +47,7 @@ public class WebRestControllerAdvice {
 
     @ExceptionHandler(BaseSchoolDriverException.class)
     public ResponseEntity<List<ErrorResponseDTO>> handleMethodArgumentNotValid(BaseSchoolDriverException exception){
-        return new ResponseEntity<>(Collections.singletonList(new ErrorResponseDTO(exception.getMessage(), exception.getHttpStatus().value(), exception.getHttpStatus().getReasonPhrase())), exception.getHttpStatus());
+        return new ResponseEntity<>(exception.getErrorResponseDTOS(), exception.getHttpStatus());
     }
 
     @ExceptionHandler(Exception.class)

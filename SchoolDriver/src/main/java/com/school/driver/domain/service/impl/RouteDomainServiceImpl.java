@@ -11,6 +11,7 @@ import com.school.driver.domain.service.RouteDomainService;
 import com.school.driver.domain.service.StudentDomainService;
 import com.school.driver.domain.vo.request.RouteListFilterRequestVO;
 import com.school.driver.domain.vo.response.RoutePaginatedVO;
+import com.school.driver.domain.vo.response.ValidationResponseVO;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -30,10 +31,7 @@ public class RouteDomainServiceImpl implements RouteDomainService {
 
     @Override
     public Route initializeRoute(Route route) {
-        String validationError = route.canInitializeRoute();
-        if(Objects.nonNull(validationError)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationError), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidation(route.canInitializeRoute());
         route.setBeginDate(LocalDateTime.now());
         route.setStatus(RouteStatusEnum.INITIALIZED);
         return routeRepository.saveRoute(route);
@@ -42,10 +40,7 @@ public class RouteDomainServiceImpl implements RouteDomainService {
     @Override
     public void removeRoute(Long id) {
         Route route = findRoute(id);
-        String validationError = route.canRemoveRoute();
-        if(Objects.nonNull(validationError)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationError), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidation(route.canRemoveRoute());
         route.setStatus(RouteStatusEnum.DELETED);
         routeRepository.saveRoute(route);
     }
@@ -53,10 +48,7 @@ public class RouteDomainServiceImpl implements RouteDomainService {
     @Override
     public void finalizeRoute(Long id) {
         Route route = findRoute(id);
-        String validationError = route.canFinalizeRoute();
-        if(Objects.nonNull(validationError)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationError), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidation(route.canFinalizeRoute());
         route.setStatus(RouteStatusEnum.FINALIZED);
         route.setEndDate(LocalDateTime.now());
         routeRepository.saveRoute(route);
@@ -66,10 +58,7 @@ public class RouteDomainServiceImpl implements RouteDomainService {
     public void includeStudent(Long routeId, Long studentId) {
         Route route = findRoute(routeId);
         Student student = studentDomainService.findById(studentId);
-        String validationError = route.canIncludeStudent(student);
-        if(Objects.nonNull(validationError)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationError), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidation(route.canIncludeStudent(student));
         route.getStudentsOnRoute().add(student);
         routeRepository.saveRoute(route);
     }
@@ -78,10 +67,7 @@ public class RouteDomainServiceImpl implements RouteDomainService {
     public void removeStudent(Long routeId, Long studentId) {
         Route route = findRoute(routeId);
         Student student = studentDomainService.findById(studentId);
-        String validationError = route.canRemoveStudent(student);
-        if(Objects.nonNull(validationError)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationError), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidation(route.canRemoveStudent(student));
         route.getStudentsOnRoute().remove(student);
         routeRepository.saveRoute(route);
     }
@@ -94,5 +80,12 @@ public class RouteDomainServiceImpl implements RouteDomainService {
     @Override
     public RoutePaginatedVO findRoutesByFilter(RouteListFilterRequestVO listFilterRequestVO) {
         return routeRepository.findRoutesByFilter(listFilterRequestVO);
+    }
+
+    @Override
+    public void treatValidation(ValidationResponseVO validationResponseVO) {
+        if(!validationResponseVO.getSuccess()){
+            throw new BaseSchoolDriverException(validationResponseVO.getValidationErrorMessages(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 }

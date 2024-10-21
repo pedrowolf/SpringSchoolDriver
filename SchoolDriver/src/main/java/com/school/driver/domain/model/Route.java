@@ -3,6 +3,7 @@ package com.school.driver.domain.model;
 import com.school.driver.domain.model.constants.MessageConstants;
 import com.school.driver.domain.model.enums.RouteStatusEnum;
 import com.school.driver.domain.model.enums.RouteTypeEnum;
+import com.school.driver.domain.vo.response.ValidationResponseVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,50 +37,64 @@ public class Route {
         this.id = id;
     }
 
-    public String canInitializeRoute(){
+    public ValidationResponseVO canInitializeRoute(){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(type.equals(RouteTypeEnum.RETURN) && Objects.isNull(linkedRoute)){
-            return MessageConstants.MESSAGE_ROUTE_WITHOUT_LINKED_ROUTE_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_WITHOUT_LINKED_ROUTE_ERROR);
         }
         return null;
     }
 
-    public String canRemoveRoute(){
+    public ValidationResponseVO canRemoveRoute(){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(status.equals(RouteStatusEnum.DELETED)){
-            return MessageConstants.MESSAGE_ROUTE_ALREADY_REMOVED_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_ALREADY_REMOVED_ERROR);
         }
         if(!CollectionUtils.isEmpty(studentsOnRoute)){
-            return  MessageConstants.MESSAGE_ROUTE_CONTAINS_STUDENTS_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_CONTAINS_STUDENTS_ERROR);
         }
-        return null;
+        return validationResponseVO;
     }
 
-    public String canFinalizeRoute(){
+    public ValidationResponseVO canFinalizeRoute(){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(status.equals(RouteStatusEnum.FINALIZED)){
-            return MessageConstants.MESSAGE_ROUTE_ALREADY_FINALIZED_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_ALREADY_FINALIZED_ERROR);
         }
         if(status.equals(RouteStatusEnum.DELETED)){
-            return MessageConstants.MESSAGE_ROUTE_REMOVED_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_REMOVED_ERROR);
         }
-        return null;
+        return validationResponseVO;
     }
 
-    public String canIncludeStudent(Student student){
+    public ValidationResponseVO canIncludeStudent(Student student){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(!status.equals(RouteStatusEnum.INITIALIZED)){
-            return MessageConstants.MESSAGE_ROUTE_NOT_INICIALIZED_STATUS_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_NOT_INICIALIZED_STATUS_ERROR);
         }
         if(studentsOnRoute.contains(student)){
-            return MessageConstants.MESSAGE_ROUTE_STUDENT_ALREADY_ON_ROUTE_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_STUDENT_ALREADY_ON_ROUTE_ERROR);
         }
-        return null;
+        return validationResponseVO;
     }
 
-    public String canRemoveStudent(Student student){
+    public ValidationResponseVO canRemoveStudent(Student student){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(!status.equals(RouteStatusEnum.INITIALIZED)){
-            return MessageConstants.MESSAGE_ROUTE_NOT_INICIALIZED_STATUS_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_NOT_INICIALIZED_STATUS_ERROR);
         }
         if(!studentsOnRoute.contains(student)){
-            return MessageConstants.MESSAGE_ROUTE_WITHOUT_THIS_STUDENT_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_WITHOUT_THIS_STUDENT_ERROR);
         }
-        return null;
+        return validationResponseVO;
     }
 }

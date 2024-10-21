@@ -9,9 +9,9 @@ import com.school.driver.domain.service.MessageBundleService;
 import com.school.driver.domain.service.StudentDomainService;
 import com.school.driver.domain.vo.request.StudentListFilterVO;
 import com.school.driver.domain.vo.response.StudentPaginatedVO;
+import com.school.driver.domain.vo.response.ValidationResponseVO;
 import org.springframework.http.HttpStatus;
 
-import java.util.Objects;
 
 public class StudentDomainServiceImpl implements StudentDomainService {
 
@@ -26,20 +26,14 @@ public class StudentDomainServiceImpl implements StudentDomainService {
     @Override
     public Student createStudent(Student student) {
         student.setStatus(StudentStatus.ENABLED);
-        String validationErrorMessage = student.canCreateStudent();
-        if(Objects.nonNull(validationErrorMessage)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationErrorMessage), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidations(student.canCreateStudent());
         //todo check external cep api
         return repository.saveStudent(student);
     }
 
     @Override
     public Student updateStudent(Student student) {
-        String validationErrorMessage = student.canUpdateStudent();
-        if(Objects.nonNull(validationErrorMessage)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationErrorMessage), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidations(student.canUpdateStudent());
         //todo check external cep api
         return repository.saveStudent(student);
     }
@@ -47,10 +41,7 @@ public class StudentDomainServiceImpl implements StudentDomainService {
     @Override
     public void deleteStudent(Long id) {
         Student student = findById(id);
-        String validationErrorMessage = student.canDeleteStudent();
-        if(Objects.nonNull(validationErrorMessage)){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(validationErrorMessage), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        treatValidations(student.canDeleteStudent());
         student.setStatus(StudentStatus.DELETED);
         repository.saveStudent(student);
     }
@@ -63,5 +54,12 @@ public class StudentDomainServiceImpl implements StudentDomainService {
     @Override
     public StudentPaginatedVO listStudents(StudentListFilterVO listFilterVO) {
         return repository.listStudents(listFilterVO);
+    }
+
+    @Override
+    public void treatValidations(ValidationResponseVO validationResponseVO) {
+        if(!validationResponseVO.getSuccess()){
+            throw new BaseSchoolDriverException(validationResponseVO.getValidationErrorMessages(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 }

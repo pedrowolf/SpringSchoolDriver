@@ -2,6 +2,7 @@ package com.school.driver.domain.model;
 
 import com.school.driver.domain.model.constants.MessageConstants;
 import com.school.driver.domain.model.enums.StudentStatus;
+import com.school.driver.domain.vo.response.ValidationResponseVO;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,42 +31,53 @@ public class Student {
 
     private StudentStatus status;
 
-    public String canCreateStudent(){
+    public ValidationResponseVO canCreateStudent(){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(Objects.nonNull(id)){
-            return MessageConstants.MESSAGE_STUDENT_CREATE_WITH_ID_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_CREATE_WITH_ID_ERROR);
         }
-        return canPersistStudent();
+        canPersistStudent(validationResponseVO);
+        return validationResponseVO;
     }
 
-    public String canUpdateStudent(){
+    public ValidationResponseVO canUpdateStudent(){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(Objects.isNull(id)){
-            return MessageConstants.MESSAGE_STUDENT_UPDATE_WITHOUT_ID_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_UPDATE_WITHOUT_ID_ERROR);
         }
         if(status.equals(StudentStatus.DELETED)){
-            return MessageConstants.MESSAGE_STUDENT_STATUS_UPDATE_TO_DELETED_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_STATUS_UPDATE_TO_DELETED_ERROR);
         }
-        return canPersistStudent();
+        canPersistStudent(validationResponseVO);
+        return validationResponseVO;
     }
 
-    public String canDeleteStudent(){
+    public ValidationResponseVO canDeleteStudent(){
+        ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(Objects.isNull(id)){
-            return MessageConstants.MESSAGE_STUDENT_UPDATE_WITHOUT_ID_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_UPDATE_WITHOUT_ID_ERROR);
         }
         if(status.equals(StudentStatus.DELETED)){
-            return MessageConstants.MESSAGE_STUDENT_ALREADY_DELETED_ERROR;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_ALREADY_DELETED_ERROR);
         }
-        return null;
+        return validationResponseVO;
     }
 
-    private String canPersistStudent(){
+    private void canPersistStudent(ValidationResponseVO validationResponseVO){
         if(StringUtils.isBlank(name) || StringUtils.isBlank(fatherName) || StringUtils.isBlank(motherName)
                 || StringUtils.isBlank(postalCode) || StringUtils.isBlank(address)){
-            return MessageConstants.MESSAGE_STUDENT_CREATE_WITHOUT_NEEDED_FIELDS;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_CREATE_WITHOUT_NEEDED_FIELDS);
         }
         if(StringUtils.isBlank(motherPhone) && StringUtils.isBlank(fatherPhone)){
-            return MessageConstants.MESSAGE_STUDENT_CREATE_WITHOUT_RESPONSIBLE_PHONE;
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_CREATE_WITHOUT_RESPONSIBLE_PHONE);
         }
-        return null;
     }
 
     @Override
