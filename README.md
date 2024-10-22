@@ -21,6 +21,12 @@ Funções do microserviço:
 - Swagger
 - Mapstruct
 
+##### Container Docker
+Para subir a base PostgreSQL localmente, foi utilizada a imagem oficial PostgreSQL no docker com a definição das seguintes ENVs:
+- POSTGRES_PASSWORD=[SUA_SENHA]
+- POSTGRES_USER=[SEU_USER]
+- POSTGRES_DB=[NOME_BASE]
+
 ##### Possíveis evoluções
 - Cadastro de foto do aluno e guardar o arquivo em um bucket AWS S3
 - Sistema de gerenciamento para motoristas, um microserviço separado para cadastrar e gerenciar motoristas que vão usar o app
