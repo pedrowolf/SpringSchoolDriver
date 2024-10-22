@@ -39,10 +39,11 @@ public class StudentEntity {
     @Column(name = "NR_POSTAL_CODE", nullable = false)
     private String postalCode;
 
-    @Column(name = "DS_ADDRESS", nullable = false)
-    private String address;
-
     @Column(name = "DS_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ID_ADDRESS", referencedColumnName = "ID_ADDRESS", nullable = false)
+    private AddressEntity address;
 }

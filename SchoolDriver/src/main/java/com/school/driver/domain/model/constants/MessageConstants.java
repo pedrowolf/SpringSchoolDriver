@@ -10,8 +10,6 @@ public interface MessageConstants {
 
     String MESSAGE_MOTHER_NAME_NEEDED = "msg.student.mother.name.needed";
 
-    String MESSAGE_STUDENT_POSTAL_CODE_NEEDED = "msg.student.postal.code.needed";
-
     String MESSAGE_STUDENT_ADDRESS_NEEDED = "msg.student.address.needed";
 
     String MESSAGE_STUDENT_CREATE_WITH_ID_ERROR = "msg.student.create.with.id.error";
@@ -47,4 +45,17 @@ public interface MessageConstants {
     String MESSAGE_ROUTE_STUDENT_ALREADY_ON_ROUTE_ERROR = "msg.route.student.already.on.route.error";
 
     String MESSAGE_ROUTE_WITHOUT_THIS_STUDENT_ERROR = "msg.route.without.this.student.error";
+
+    String MESSAGE_ADDRESS_POSTAL_CODE_NEEDED = "msg.address.postal.code.needed";
+
+    String MESSAGE_ADDRESS_STREET_NEEDED = "msg.address.street.needed";
+
+    String MESSAGE_ADDRESS_NEIGHBORHOOD_NEEDED = "msg.neighborhood.street.needed";
+
+    String MESSAGE_ADDRESS_CITY_NEEDED = "msg.address.city.needed";
+
+    String MESSAGE_ADDRESS_STATE_NEEDED = "msg.address.state.needed";
+
+    String MESSAGE_ADDRESS_WITHOUT_NEEDED_FIELDS_ERROR = "msg.address.without.needed.fields.error";
+
 }

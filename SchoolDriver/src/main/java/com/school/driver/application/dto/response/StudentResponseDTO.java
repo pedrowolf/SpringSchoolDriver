@@ -28,9 +28,7 @@ public class StudentResponseDTO {
 
     private String motherPhone;
 
-    private String postalCode;
-
-    private String address;
+    private AddressResponseDTO addressResponseDTO;
 
     private StudentStatus status;
 

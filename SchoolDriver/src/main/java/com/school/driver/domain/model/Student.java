@@ -25,9 +25,7 @@ public class Student {
 
     private String motherPhone;
 
-    private String postalCode;
-
-    private String address;
+    private Address address;
 
     private StudentStatus status;
 
@@ -38,6 +36,11 @@ public class Student {
             validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_CREATE_WITH_ID_ERROR);
         }
         canPersistStudent(validationResponseVO);
+        if(validationResponseVO.getSuccess()){
+            ValidationResponseVO validationAddress = address.canPersistAddress();
+            validationAddress.setSuccess(validationAddress.getSuccess());
+            validationResponseVO.getValidationErrorMessages().addAll(validationAddress.getValidationErrorMessages());
+        }
         return validationResponseVO;
     }
 
@@ -69,8 +72,7 @@ public class Student {
     }
 
     private void canPersistStudent(ValidationResponseVO validationResponseVO){
-        if(StringUtils.isBlank(name) || StringUtils.isBlank(fatherName) || StringUtils.isBlank(motherName)
-                || StringUtils.isBlank(postalCode) || StringUtils.isBlank(address)){
+        if(StringUtils.isBlank(name) || StringUtils.isBlank(fatherName) || StringUtils.isBlank(motherName) || Objects.isNull(address)){
             validationResponseVO.setSuccess(Boolean.FALSE);
             validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_STUDENT_CREATE_WITHOUT_NEEDED_FIELDS);
         }
