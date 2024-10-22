@@ -34,6 +34,7 @@ Para subir a base PostgreSQL localmente, foi utilizada a imagem oficial PostgreS
 - Aviso aos responsáveis do aluno quando o mesmo for incluido em uma rota, aviso via SMS ou por notificação push utilizando o AWS SNS
 
 ##### Possível cenário de deploy
+- Não utilizar ddl-auto=update
 - Criação de um RDS PostgreSQL na AWS para servir de base de prod
 - Criação de AWS EKS para gerenciamento e deploy da aplicação em um container
 - Utilização de uma pipeline Jenkins para start do deploy, ou utilização de um webhook com git que dispara o build automaticamente
