@@ -3,6 +3,8 @@ package com.school.driver.application.dto.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,5 +17,7 @@ public class StudentListFilterRequestDTO extends PageFilterDTO{
     private String fatherName;
 
     private String motherName;
+
+    private String status;
 
 }

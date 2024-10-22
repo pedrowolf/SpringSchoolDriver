@@ -40,11 +40,15 @@ public interface MessageConstants {
 
     String MESSAGE_ROUTE_WITHOUT_LINKED_ROUTE_ERROR = "msg.route.without.linked.route.error";
 
-    String MESSAGE_ROUTE_NOT_INICIALIZED_STATUS_ERROR = "msg.route.not.initialized.error";
+    String MESSAGE_ROUTE_NOT_INITIALIZED_STATUS_ERROR = "msg.route.not.initialized.error";
+
+    String MESSAGE_ROUTE_LINKED_ROUTE_NEED_IS_FINALIZED_ERROR = "msg.route.linked.need.is.finalized.error";
 
     String MESSAGE_ROUTE_STUDENT_ALREADY_ON_ROUTE_ERROR = "msg.route.student.already.on.route.error";
 
     String MESSAGE_ROUTE_WITHOUT_THIS_STUDENT_ERROR = "msg.route.without.this.student.error";
+
+    String MESSAGE_ROUTE_CANT_INCLUDE_NOT_ENABLED_ERROR = "msg.route.cant.include.not.enable.student.error";
 
     String MESSAGE_ADDRESS_POSTAL_CODE_NEEDED = "msg.address.postal.code.needed";
 

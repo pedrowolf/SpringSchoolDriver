@@ -17,7 +17,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RouteStartRequestDTO {
 
-    private String linkedRouteId;
+    private Long linkedRouteId;
 
     @NotNull(message = MessageConstants.MESSAGE_ROUTE_TYPE_NEEDED)
     private RouteTypeEnum type;

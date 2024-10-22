@@ -10,4 +10,6 @@ public class StudentListFilterVO extends PageFilterVO{
     private String fatherName;
 
     private String motherName;
+
+    private String status;
 }

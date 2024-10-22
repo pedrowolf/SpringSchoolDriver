@@ -17,4 +17,6 @@ public class RouteListFilterRequestDTO extends PageFilterDTO{
 
     private LocalDate routeDate;
 
+    private String status;
+
 }

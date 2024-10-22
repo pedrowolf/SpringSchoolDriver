@@ -46,6 +46,7 @@ public class RouteRepositoryImpl implements RouteRepository {
         Pageable pageable = PageRequest.of(listFilterRequestVO.getPageNumber() - 1, listFilterRequestVO.getPageSize());
         Page<RouteEntity> page = repository.findAllByFilters(
                 Objects.nonNull(listFilterRequestVO.getRouteDate()) ? listFilterRequestVO.getRouteDate().format(DateTimeFormatter.ofPattern(DATE_FORMATTER)) : null,
+                listFilterRequestVO.getStatus(),
                 pageable);
         return new RoutePaginatedVO(mapper.fromListEntityToListDomain(page.getContent()), (int)page.getTotalElements());
     }

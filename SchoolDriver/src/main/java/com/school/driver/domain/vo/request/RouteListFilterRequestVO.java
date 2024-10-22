@@ -10,4 +10,6 @@ public class RouteListFilterRequestVO extends PageFilterVO {
 
     private LocalDate routeDate;
 
+    private String status;
+
 }

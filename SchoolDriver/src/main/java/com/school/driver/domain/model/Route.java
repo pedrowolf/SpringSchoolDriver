@@ -3,6 +3,7 @@ package com.school.driver.domain.model;
 import com.school.driver.domain.model.constants.MessageConstants;
 import com.school.driver.domain.model.enums.RouteStatusEnum;
 import com.school.driver.domain.model.enums.RouteTypeEnum;
+import com.school.driver.domain.model.enums.StudentStatus;
 import com.school.driver.domain.vo.response.ValidationResponseVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +44,11 @@ public class Route {
             validationResponseVO.setSuccess(Boolean.FALSE);
             validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_WITHOUT_LINKED_ROUTE_ERROR);
         }
-        return null;
+        if(Objects.nonNull(linkedRoute) && type.equals(RouteTypeEnum.RETURN) && !linkedRoute.getStatus().equals(RouteStatusEnum.FINALIZED)){
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_LINKED_ROUTE_NEED_IS_FINALIZED_ERROR);
+        }
+        return validationResponseVO;
     }
 
     public ValidationResponseVO canRemoveRoute(){
@@ -76,11 +81,15 @@ public class Route {
         ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(!status.equals(RouteStatusEnum.INITIALIZED)){
             validationResponseVO.setSuccess(Boolean.FALSE);
-            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_NOT_INICIALIZED_STATUS_ERROR);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_NOT_INITIALIZED_STATUS_ERROR);
         }
         if(studentsOnRoute.contains(student)){
             validationResponseVO.setSuccess(Boolean.FALSE);
             validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_STUDENT_ALREADY_ON_ROUTE_ERROR);
+        }
+        if(!student.getStatus().equals(StudentStatus.ENABLED)){
+            validationResponseVO.setSuccess(Boolean.FALSE);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_CANT_INCLUDE_NOT_ENABLED_ERROR);
         }
         return validationResponseVO;
     }
@@ -89,7 +98,7 @@ public class Route {
         ValidationResponseVO validationResponseVO = new ValidationResponseVO();
         if(!status.equals(RouteStatusEnum.INITIALIZED)){
             validationResponseVO.setSuccess(Boolean.FALSE);
-            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_NOT_INICIALIZED_STATUS_ERROR);
+            validationResponseVO.getValidationErrorMessages().add(MessageConstants.MESSAGE_ROUTE_NOT_INITIALIZED_STATUS_ERROR);
         }
         if(!studentsOnRoute.contains(student)){
             validationResponseVO.setSuccess(Boolean.FALSE);

@@ -43,6 +43,7 @@ public class StudentRepositoryImpl implements StudentRepository {
         Page<StudentEntity> page = jpaStudentRepository.findAllByFilters(filterVO.getName(),
                 filterVO.getFatherName(),
                 filterVO.getMotherName(),
+                filterVO.getStatus(),
                 pageable);
         return new StudentPaginatedVO(page.getContent().stream().map(i -> objectMapper.convertValue(i, Student.class)).toList(), (int)page.getTotalElements());
     }

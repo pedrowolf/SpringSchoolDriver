@@ -12,10 +12,13 @@ import org.springframework.stereotype.Repository;
 public interface JpaRouteRepository extends JpaRepository<RouteEntity, Long> {
 
     @Query(value =  "select * from TB_ROUTE rt " +
-                    "where (:date is null or to_char(rt.DH_BEGIN, 'YYYY-MM-DD') = :date) ",
+                    "where (:date is null or to_char(rt.DH_BEGIN, 'YYYY-MM-DD') = :date) " +
+                    "and (:status is null or rt.DS_STATUS = :status)",
             countQuery = "select count(*) from TB_STUDENT st " +
-                    "where (:date is null or to_char(rt.DH_BEGIN, 'YYYY-MM-DD') = :date) ",
+                    "where (:date is null or to_char(rt.DH_BEGIN, 'YYYY-MM-DD') = :date) " +
+                    "and (:status is null or rt.DS_STATUS = :status)",
             nativeQuery = true)
     Page<RouteEntity> findAllByFilters(@Param("date") String date,
+                                   @Param("status") String status,
                                    Pageable pageable);
 }

@@ -31,6 +31,10 @@ public class RouteDomainServiceImpl implements RouteDomainService {
 
     @Override
     public Route initializeRoute(Route route) {
+        if(Objects.nonNull(route.getLinkedRoute())){
+            Route linkedRoute = findRoute(route.getLinkedRoute().getId());
+            route.setLinkedRoute(linkedRoute);
+        }
         treatValidation(route.canInitializeRoute());
         route.setBeginDate(LocalDateTime.now());
         route.setStatus(RouteStatusEnum.INITIALIZED);

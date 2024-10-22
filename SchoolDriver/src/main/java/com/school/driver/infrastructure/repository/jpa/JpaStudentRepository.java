@@ -15,14 +15,17 @@ public interface JpaStudentRepository extends JpaRepository<StudentEntity, Long>
     @Query(value =  "select * from TB_STUDENT st " +
                     "where (:name is null or lower(st.NM_STUDENT) like lower(:name)||'%') " +
                     "and (:fatherName is null or lower(st.NM_FATHER) like lower(:fatherName)||'%') " +
-                    "and (:motherName is null or lower(st.NM_MOTHER) like lower(:motherName)||'%') ",
+                    "and (:motherName is null or lower(st.NM_MOTHER) like lower(:motherName)||'%') " +
+                    "and (:status is null or st.DS_STATUS = :status) ",
             countQuery = "select count(*) from TB_STUDENT st " +
                     "where (:name is null or lower(st.NM_STUDENT) like lower(:name)||'%') " +
                     "and (:fatherName is null or lower(st.NM_FATHER) like lower(:fatherName)||'%') " +
-                    "and (:motherName is null or lower(st.NM_MOTHER) like lower(:motherName)||'%') ",
+                    "and (:motherName is null or lower(st.NM_MOTHER) like lower(:motherName)||'%') " +
+                    "and (:status is null or st.DS_STATUS = :status) ",
             nativeQuery = true)
     Page<StudentEntity> findAllByFilters(@Param("name") String name,
                                    @Param("fatherName") String fatherName,
                                    @Param("motherName") String motherName,
+                                   @Param("status") String status,
                                    Pageable pageable);
 }
