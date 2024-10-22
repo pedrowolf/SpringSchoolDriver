@@ -2,7 +2,8 @@
 Projeto Spring de um microservice para gerenciamento de Rotas de vans e ônibus escolares.<br>
 Nesse projeto é utilziado conceitos de SOLID, além disso é aplicado o pattern de DDD, separando a aplicação em camadas.<br>
 As camadas são basicamente aplicação, domínio e infraestrutura, a ideia é que toda regra de negócio fique na camada de domínio e caso precise fazer alteração na camada de aplicação e infra não afete a regra negocial do projeto, por exemplo podemos deixar de utilizar framework Spring para outro framework como Quarkus e com algumas alterações somente nas camadas de infraestrutura e aplicação conseguir deixar o projeto rodando, sem afetar o core da mesma que está na camada de domínio.<br>
-Na aplicação é feito o consumo de uma API externa de consulta de CEPs, que atualmente está mockada na AWS, utilizando um API Gateway com Recurso mockado.
+Na aplicação é feito o consumo de uma API externa de consulta de CEPs, que atualmente está mockada na AWS, utilizando um API Gateway com Recurso mockado.<br>
+Na pasta diagrams é possível ver uma imagem do diagrama de estrutura simplificado da aplicação.
 
 Funções do microserviço:
 - Gerenciar o cadastro de alunos;
@@ -34,7 +35,7 @@ Para subir a base PostgreSQL localmente, foi utilizada a imagem oficial PostgreS
 - Aviso aos responsáveis do aluno quando o mesmo for incluido em uma rota, aviso via SMS ou por notificação push utilizando o AWS SNS
 
 ##### Possível cenário de deploy
-- Não utilizar ddl-auto=update
+- Não utilizar ddl-auto=update, mas sim utilizar migrations ou outra ferramenta de implantação de SQLs
 - Criação de um RDS PostgreSQL na AWS para servir de base de prod
 - Criação de AWS EKS para gerenciamento e deploy da aplicação em um container
 - Utilização de uma pipeline Jenkins para start do deploy, ou utilização de um webhook com git que dispara o build automaticamente
