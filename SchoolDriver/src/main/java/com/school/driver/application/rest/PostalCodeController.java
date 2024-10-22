@@ -1,5 +1,6 @@
 package com.school.driver.application.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.driver.application.dto.request.StudentCreateRequestDTO;
 import com.school.driver.application.dto.request.StudentListFilterRequestDTO;
@@ -37,19 +38,13 @@ public class PostalCodeController {
     private final PostalCodeService postalCodeService;
     private final PostalCodeMapper postalCodeMapper;
 
-    private final MessageBundleService messageBundleService;
-
     @GetMapping("/{postalCode}")
     @Operation(summary = "Consultar CEP")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "CEP consultado com sucesso")
     })
     public PostalCodeResponseDTO findPostalCode(@PathVariable String postalCode){
-        try {
-            PostalCodeResponseVO responseVO = postalCodeService.findPostalCode(postalCode);
-            return postalCodeMapper.fromVoToDto(responseVO);
-        }catch (Exception e){
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_FIND_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        PostalCodeResponseVO responseVO = postalCodeService.findPostalCode(postalCode);
+        return postalCodeMapper.fromVoToDto(responseVO);
     }
 }

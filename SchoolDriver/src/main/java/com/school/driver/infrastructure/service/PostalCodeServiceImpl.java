@@ -37,23 +37,30 @@ public class PostalCodeServiceImpl implements PostalCodeService {
     private final ConfigProperties configProperties;
 
     @Override
-    public PostalCodeResponseVO findPostalCode(String postalCode) throws JsonProcessingException {
+    public PostalCodeResponseVO findPostalCode(String postalCode){
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-api-key", configProperties.getApiKey());
         try {
-            ResponseEntity<String> response = restTemplate.exchange(configProperties.getPostalCodeUrl().concat(configProperties.getPostalCodePath()).concat("/").concat(postalCode),
+            ResponseEntity<String> response = restTemplate.exchange(configProperties.getPostalCodeUrl()
+                            .concat(configProperties.getPostalCodePath())
+                            .concat("/")
+                            .concat(postalCode),
                     HttpMethod.GET, new HttpEntity<>(headers), String.class);
             PostalCodeResponseDTO dto = objectMapper.readValue(response.getBody(), PostalCodeResponseDTO.class);
             saveLog(response.getBody(), response.getStatusCode().value(), postalCode);
             return postalCodeMapper.fromDtoToVo(dto);
-        } catch (HttpClientErrorException e) {
-            saveLog(e.getResponseBodyAsString(), e.getStatusCode().value(), postalCode);
-            if(e.getStatusCode().is4xxClientError()) {
-                throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_NOT_FOUND_ERROR), HttpStatus.NOT_FOUND);
+        } catch (HttpClientErrorException | JsonProcessingException e) {
+            if(e instanceof HttpClientErrorException) {
+                HttpClientErrorException ex = (HttpClientErrorException) e;
+                saveLog(ex.getResponseBodyAsString(), ex.getStatusCode().value(), postalCode);
+                if (ex.getStatusCode().is4xxClientError()) {
+                    throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_NOT_FOUND_ERROR), HttpStatus.NOT_FOUND);
+                }
+                throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_FIND_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            }else{
+                throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_FIND_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_FIND_ERROR), HttpStatus.NOT_FOUND);
         }
-
     }
 
     private void saveLog(String responseBody, Integer responseStatusCode, String postalCode) {

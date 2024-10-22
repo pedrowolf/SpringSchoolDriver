@@ -5,5 +5,5 @@ import com.school.driver.domain.vo.response.PostalCodeResponseVO;
 
 public interface PostalCodeService {
 
-    PostalCodeResponseVO findPostalCode(String postalCode) throws JsonProcessingException;
+    PostalCodeResponseVO findPostalCode(String postalCode);
 }
