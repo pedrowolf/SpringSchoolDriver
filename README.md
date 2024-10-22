@@ -22,7 +22,7 @@ Funções do microserviço:
 - Mapstruct
 
 ##### Container Docker
-Para subir a base PostgreSQL localmente, foi utilizada a imagem oficial PostgreSQL no docker com a definição das seguintes ENVs:
+Para subir a base PostgreSQL localmente, foi utilizada a imagem oficial PostgreSQL no docker(https://hub.docker.com/_/postgres) com a definição das seguintes ENVs:
 - POSTGRES_PASSWORD=[SUA_SENHA]
 - POSTGRES_USER=[SEU_USER]
 - POSTGRES_DB=[NOME_BASE]
