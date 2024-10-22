@@ -15,6 +15,7 @@ Funções do microserviço:
 - Spring Data | JPA
 - Spring Validation
 - H2 Database
+- Docker
 - PostgreSQL
 - Lombok
 - Swagger
