@@ -13,12 +13,14 @@ import com.school.driver.domain.service.impl.RouteDomainServiceImpl;
 import com.school.driver.domain.service.impl.StudentDomainServiceImpl;
 import com.school.driver.infrastructure.repository.RouteRepositoryImpl;
 import com.school.driver.infrastructure.repository.StudentRepositoryImpl;
+import com.school.driver.infrastructure.service.PostalCodeServiceImpl;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -29,8 +31,9 @@ public class BeanConfig {
 
     @Bean
     public StudentDomainService studentDomainService(StudentRepositoryImpl repository,
-                                                     MessageBundleService messageBundleService){
-        return new StudentDomainServiceImpl(repository, messageBundleService);
+                                                     MessageBundleService messageBundleService,
+                                                     PostalCodeServiceImpl postalCodeService){
+        return new StudentDomainServiceImpl(repository, messageBundleService, postalCodeService);
     }
 
     @Bean
@@ -53,5 +56,10 @@ public class BeanConfig {
         });
         objectMapper.registerModule(javaTimeModule);
         return objectMapper;
+    }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 }

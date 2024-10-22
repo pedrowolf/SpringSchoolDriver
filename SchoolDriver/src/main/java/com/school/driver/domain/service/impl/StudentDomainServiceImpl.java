@@ -6,6 +6,7 @@ import com.school.driver.domain.model.constants.MessageConstants;
 import com.school.driver.domain.model.enums.StudentStatus;
 import com.school.driver.domain.repository.StudentRepository;
 import com.school.driver.domain.service.MessageBundleService;
+import com.school.driver.domain.service.PostalCodeService;
 import com.school.driver.domain.service.StudentDomainService;
 import com.school.driver.domain.vo.request.StudentListFilterVO;
 import com.school.driver.domain.vo.response.StudentPaginatedVO;
@@ -17,25 +18,34 @@ public class StudentDomainServiceImpl implements StudentDomainService {
 
     private final StudentRepository repository;
     private final MessageBundleService messageBundleService;
+    private final PostalCodeService postalCodeService;
 
-    public StudentDomainServiceImpl(StudentRepository repository, MessageBundleService messageBundleService) {
+    public StudentDomainServiceImpl(StudentRepository repository, MessageBundleService messageBundleService, PostalCodeService postalCodeService) {
         this.repository = repository;
         this.messageBundleService = messageBundleService;
+        this.postalCodeService = postalCodeService;
     }
 
     @Override
     public Student createStudent(Student student) {
         student.setStatus(StudentStatus.ENABLED);
         treatValidations(student.canCreateStudent());
-        //todo check external cep api
+        try {
+            postalCodeService.findPostalCode(student.getAddress().getPostalCode());
+        }catch (Exception e){
+            throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_FIND_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return repository.saveStudent(student);
     }
 
     @Override
     public Student updateStudent(Student student) {
         treatValidations(student.canUpdateStudent());
-        //todo check external cep api
-        return repository.saveStudent(student);
+        try {
+            postalCodeService.findPostalCode(student.getAddress().getPostalCode());
+        }catch (Exception e){
+            throw new BaseSchoolDriverException(messageBundleService.getMessage(MessageConstants.MESSAGE_POSTAL_CODE_API_FIND_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }        return repository.saveStudent(student);
     }
 
     @Override
@@ -59,7 +69,7 @@ public class StudentDomainServiceImpl implements StudentDomainService {
     @Override
     public void treatValidations(ValidationResponseVO validationResponseVO) {
         if(!validationResponseVO.getSuccess()){
-            throw new BaseSchoolDriverException(validationResponseVO.getValidationErrorMessages(), HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new BaseSchoolDriverException(messageBundleService.getMessageList(validationResponseVO.getValidationErrorMessages()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 }

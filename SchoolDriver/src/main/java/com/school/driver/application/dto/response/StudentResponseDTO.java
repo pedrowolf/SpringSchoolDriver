@@ -28,7 +28,7 @@ public class StudentResponseDTO {
 
     private String motherPhone;
 
-    private AddressResponseDTO addressResponseDTO;
+    private AddressResponseDTO address;
 
     private StudentStatus status;
 

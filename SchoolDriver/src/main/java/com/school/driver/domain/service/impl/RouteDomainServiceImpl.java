@@ -85,7 +85,7 @@ public class RouteDomainServiceImpl implements RouteDomainService {
     @Override
     public void treatValidation(ValidationResponseVO validationResponseVO) {
         if(!validationResponseVO.getSuccess()){
-            throw new BaseSchoolDriverException(validationResponseVO.getValidationErrorMessages(), HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new BaseSchoolDriverException(messageBundleService.getMessageList(validationResponseVO.getValidationErrorMessages()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 }

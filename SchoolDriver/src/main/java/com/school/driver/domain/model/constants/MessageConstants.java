@@ -58,4 +58,7 @@ public interface MessageConstants {
 
     String MESSAGE_ADDRESS_WITHOUT_NEEDED_FIELDS_ERROR = "msg.address.without.needed.fields.error";
 
+    String MESSAGE_POSTAL_CODE_API_FIND_ERROR = "msg.postal.code.find.error";
+
+    String MESSAGE_POSTAL_CODE_API_NOT_FOUND_ERROR = "msg.postal.code.not.found.error";
 }

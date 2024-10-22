@@ -36,9 +36,6 @@ public class StudentEntity {
     @Column(name = "NR_MOTHER_PHONE")
     private String motherPhone;
 
-    @Column(name = "NR_POSTAL_CODE", nullable = false)
-    private String postalCode;
-
     @Column(name = "DS_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
